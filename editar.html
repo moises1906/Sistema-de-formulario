@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Entrevista Social</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Editar Entrevista Social</h1>
+            <div>
+                <a href="index.html" class="btn btn-primary">Voltar</a>
+            </div>
+        </div>
+        
+        <div id="alertContainer"></div>
+        
+        <div class="card">
+            <div class="card-body">
+                <form id="entrevistaForm">
+                    <input type="hidden" id="id" name="id">
+                    
+                    <!-- 1. Dados do entrevistado -->
+                    <h3 class="section-title">1. Dados do Entrevistado</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="nome">Nome:</label>
+                                <input type="text" class="form-control" id="nome" name="nome" required>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="data_nascimento">Data de Nascimento:</label>
+                                <input type="date" class="form-control" id="data_nascimento" name="data_nascimento">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="idade">Idade:</label>
+                                <input type="number" class="form-control" id="idade" name="idade" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="endereco">Endereço:</label>
+                                <input type="text" class="form-control" id="endereco" name="endereco">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="bairro">Bairro:</label>
+                                <input type="text" class="form-control" id="bairro" name="bairro">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="contatos">Contatos:</label>
+                                <input type="text" class="form-control" id="contatos" name="contatos">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Possui cadastro em algum Centro de Referência de Assistência Social (CRAS):</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="cadastro_cras" id="cras_sim" value="true">
+                                    <label class="form-check-label" for="cras_sim">Sim</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="cadastro_cras" id="cras_nao" value="false" checked>
+                                    <label class="form-check-label" for="cras_nao">Não</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 cras-field" style="display: none;">
+                            <div class="form-group">
+                                <label for="bairro_cras">Em qual bairro?</label>
+                                <input type="text" class="form-control" id="bairro_cras" name="bairro_cras">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 2. Composição Familiar -->
+                    <h3 class="section-title">2. Composição Familiar</h3>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-success" id="addFamiliar">Adicionar Familiar</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="tabelaFamilia">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Idade</th>
+                                    <th>Data de Nascimento</th>
+                                    <th>Renda</th>
+                                    <th>Escolaridade</th>
+                                    <th>Parentesco</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Familiares serão adicionados aqui -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- 3. Meio de Chegada -->
+                    <h3 class="section-title">3. Meio de Chegada</h3>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="demanda_espontanea" name="meio_chegada[]" value="Demanda Espontânea">
+                                <label class="form-check-label" for="demanda_espontanea">Demanda Espontânea</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="encaminhamento_cras" name="meio_chegada[]" value="Encaminhamento CRAS">
+                                <label class="form-check-label" for="encaminhamento_cras">Encaminhamento CRAS</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="encaminhamento_creas" name="meio_chegada[]" value="Encaminhamento CREAS">
+                                <label class="form-check-label" for="encaminhamento_creas">Encaminhamento CREAS</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="encaminhamento_conselho" name="meio_chegada[]" value="Encaminhamento Conselho Tutelar">
+                                <label class="form-check-label" for="encaminhamento_conselho">Encaminhamento Conselho Tutelar</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="outras_politicas" name="meio_chegada[]" value="Outras Políticas Públicas">
+                                <label class="form-check-label" for="outras_politicas">Outras Políticas Públicas</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="outras_politicas_qual">Quais?</label>
+                                <input type="text" class="form-control" id="outras_politicas_qual" name="outras_politicas_qual">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="outros_meios" name="meio_chegada[]" value="Outros">
+                                <label class="form-check-label" for="outros_meios">Outros</label>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label for="outros_meios_quais">Quais?</label>
+                                <input type="text" class="form-control" id="outros_meios_quais" name="outros_meios_quais">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h4 class="subsection-title">3.1. Documentos encaminhados</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="oficio" name="documentos[]" value="Ofício">
+                                <label class="form-check-label" for="oficio">Ofício</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="relatorio_caso" name="documentos[]" value="Relatório do Caso">
+                                <label class="form-check-label" for="relatorio_caso">Relatório do Caso</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="termo_medidas" name="documentos[]" value="Termo de aplicação de medidas">
+                                <label class="form-check-label" for="termo_medidas">Termo de aplicação de medidas</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="guia_acolhimento" name="documentos[]" value="Guia de Acolhimento">
+                                <label class="form-check-label" for="guia_acolhimento">Guia de Acolhimento</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="pia" name="documentos[]" value="Plano Individual de Atendimento (PIA)">
+                                <label class="form-check-label" for="pia">Plano Individual de Atendimento (PIA)</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="outros_docs" name="documentos[]" value="Outros">
+                                <label class="form-check-label" for="outros_docs">Outros</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="outros_docs_quais">Quais?</label>
+                                <input type="text" class="form-control" id="outros_docs_quais" name="outros_docs_quais">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 4. Moradia -->
+                    <h3 class="section-title">4. Moradia</h3>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label>Tipo de moradia:</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="tipo_moradia" id="tipo_propria" value="Própria">
+                                    <label class="form-check-label" for="tipo_propria">Própria</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="tipo_moradia" id="tipo_alugada" value="Alugada">
+                                    <label class="form-check-label" for="tipo_alugada">Alugada</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="tipo_moradia" id="tipo_cedida" value="Cedida">
+                                    <label class="form-check-label" for="tipo_cedida">Cedida</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="tipo_moradia" id="tipo_ocupacao" value="Ocupação">
+                                    <label class="form-check-label" for="tipo_ocupacao">Ocupação</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="abastecimento_agua">Abastecimento de água:</label>
+                                <select class="form-control" id="abastecimento_agua" name="abastecimento_agua">
+                                    <option value="">Selecione</option>
+                                    <option value="Rede pública">Rede pública</option>
+                                    <option value="Poço">Poço</option>
+                                    <option value="Cisterna">Cisterna</option>
+                                    <option value="outro">Outro</option>
+                                </select>
+                            </div>
+                            <div class="form-group outro-abastecimento" style="display: none;">
+                                <label for="outro_abastecimento">Especifique:</label>
+                                <input type="text" class="form-control" id="outro_abastecimento" name="outro_abastecimento">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="iluminacao">Iluminação:</label>
+                                <select class="form-control" id="iluminacao" name="iluminacao">
+                                    <option value="">Selecione</option>
+                                    <option value="Rede pública">Rede pública</option>
+                                    <option value="Lamparina">Lamparina</option>
+                                    <option value="Vela">Vela</option>
+                                    <option value="outro">Outro</option>
+                                </select>
+                            </div>
+                            <div class="form-group outro-iluminacao" style="display: none;">
+                                <label for="outro_iluminacao">Especifique:</label>
+                                <input type="text" class="form-control" id="outro_iluminacao" name="outro_iluminacao">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 5. Benefícios Assistenciais -->
+                    <h3 class="section-title">5. Benefícios Assistenciais</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Recebe algum benefício assistencial?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="recebe_beneficio" id="beneficio_sim" value="true">
+                                    <label class="form-check-label" for="beneficio_sim">Sim</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="recebe_beneficio" id="beneficio_nao" value="false" checked>
+                                    <label class="form-check-label" for="beneficio_nao">Não</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 beneficios-fields" style="display: none;">
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="bolsa_familia" name="bolsa_familia">
+                                <label class="form-check-label" for="bolsa_familia">Bolsa Família</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="bpc" name="bpc">
+                                <label class="form-check-label" for="bpc">BPC (idoso ou deficiente)</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="aposentadoria" name="aposentadoria">
+                                <label class="form-check-label" for="aposentadoria">Aposentadoria</label>
+                            </div>
+                            <div class="form-check mb-2">
+                                <input class="form-check-input" type="checkbox" id="pensao" name="pensao">
+                                <label class="form-check-label" for="pensao">Pensão</label>
+                            </div>
+                            <div class="form-group mt-3">
+                                <label for="renda_familiar">Renda familiar aproximada (R$):</label>
+                                <input type="number" class="form-control" id="renda_familiar" name="renda_familiar" step="0.01" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 6. Desemprego -->
+                    <h3 class="section-title">6. Desemprego</h3>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="circunstancia_desemprego">Em que circunstância se encontra o desemprego?</label>
+                                <textarea class="form-control" id="circunstancia_desemprego" name="circunstancia_desemprego" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="interesse_curso">Tem interesse em algum curso profissionalizante? Qual?</label>
+                                <textarea class="form-control" id="interesse_curso" name="interesse_curso" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="atividades_lazer">Quais atividades de lazer a família realiza?</label>
+                                <textarea class="form-control" id="atividades_lazer" name="atividades_lazer" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 7. Privação de Liberdade -->
+                    <h3 class="section-title">7. Privação de Liberdade</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Existem familiares em privação de liberdade?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="familiares_privacao_liberdade" id="privacao_sim" value="true">
+                                    <label class="form-check-label" for="privacao_sim">Sim</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="familiares_privacao_liberdade" id="privacao_nao" value="false" checked>
+                                    <label class="form-check-label" for="privacao_nao">Não</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 privacao-field" style="display: none;">
+                            <div class="form-group">
+                                <label for="detalhes_privacao">Detalhes:</label>
+                                <textarea class="form-control" id="detalhes_privacao" name="detalhes_privacao" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 8. Adolescentes em Medidas Socioeducativas -->
+                    <h3 class="section-title">8. Adolescentes em Medidas Socioeducativas</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Existem adolescentes em cumprimento de medidas socioeducativas?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="adolescentes_medidas" id="medidas_sim" value="true">
+                                    <label class="form-check-label" for="medidas_sim">Sim</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="adolescentes_medidas" id="medidas_nao" value="false" checked>
+                                    <label class="form-check-label" for="medidas_nao">Não</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 medidas-field" style="display: none;">
+                            <div class="form-group">
+                                <label for="detalhes_medidas">Detalhes:</label>
+                                <textarea class="form-control" id="detalhes_medidas" name="detalhes_medidas" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 9. Acolhimento Institucional -->
+                    <h3 class="section-title">9. Acolhimento Institucional</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Existem crianças/adolescentes em acolhimento institucional?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="acolhimento_institucional" id="acolhimento_sim" value="true">
+                                    <label class="form-check-label" for="acolhimento_sim">Sim</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="acolhimento_institucional" id="acolhimento_nao" value="false" checked>
+                                    <label class="form-check-label" for="acolhimento_nao">Não</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 acolhimento-field" style="display: none;">
+                            <div class="form-group">
+                                <label for="detalhes_acolhimento">Detalhes:</label>
+                                <textarea class="form-control" id="detalhes_acolhimento" name="detalhes_acolhimento" rows="2"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 10. Atividades Socioeducativas -->
+                    <h3 class="section-title">10. Atividades Socioeducativas</h3>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Participa de alguma atividade socioeducativa?</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="participa_atividade" id="atividade_sim" value="true">
+                                    <label class="form-check-label" for="atividade_sim">Sim</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="participa_atividade" id="atividade_nao" value="false" checked>
+                                    <label class="form-check-label" for="atividade_nao">Não</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 atividade-fields" style="display: none;">
+                            <div class="form-group">
+                                <label for="qual_atividade">Qual atividade?</label>
+                                <input type="text" class="form-control" id="qual_atividade" name="qual_atividade">
+                            </div>
+                            <div class="form-group">
+                                <label for="dias_semana">Dias da semana:</label>
+                                <input type="text" class="form-control" id="dias_semana" name="dias_semana">
+                            </div>
+                            <div class="form-group">
+                                <label for="turno">Turno:</label>
+                                <input type="text" class="form-control" id="turno" name="turno">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 11. Demanda Apresentada -->
+                    <h3 class="section-title">11. Demanda Apresentada</h3>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="demanda_apresentada">Descreva a demanda apresentada:</label>
+                                <textarea class="form-control" id="demanda_apresentada" name="demanda_apresentada" rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 12. Encaminhamentos -->
+                    <h3 class="section-title">12. Encaminhamentos</h3>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="encaminhamentos">Encaminhamentos realizados:</label>
+                                <textarea class="form-control" id="encaminhamentos" name="encaminhamentos" rows="4"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Botões de ação -->
+                    <div class="row mt-4">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-secondary mr-2" id="limparForm">Limpar</button>
+                            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para adicionar familiar -->
+    <div class="modal fade" id="familiarModal" tabindex="-1" role="dialog" aria-labelledby="familiarModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="familiarModalLabel">Adicionar Familiar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="familiarForm">
+                        <div class="form-group">
+                            <label for="familiar_nome">Nome:</label>
+                            <input type="text" class="form-control" id="familiar_nome" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="familiar_idade">Idade:</label>
+                            <input type="number" class="form-control" id="familiar_idade" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="familiar_data_nasc">Data de Nascimento:</label>
+                            <input type="date" class="form-control" id="familiar_data_nasc">
+                        </div>
+                        <div class="form-group">
+                            <label for="familiar_renda">Renda (R$):</label>
+                            <input type="number" class="form-control" id="familiar_renda" step="0.01" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="familiar_escolaridade">Escolaridade:</label>
+                            <input type="text" class="form-control" id="familiar_escolaridade">
+                        </div>
+                        <div class="form-group">
+                            <label for="familiar_parentesco">Parentesco:</label>
+                            <input type="text" class="form-control" id="familiar_parentesco">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="salvarFamiliar">Adicionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/editar.js"></script>
+    <!-- Adicionar antes do fechamento do </body> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</body>
+</html>

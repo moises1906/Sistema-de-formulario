@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Entrevistas Sociais</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Entrevistas Sociais</h1>
+            <div>
+                <a href="index.html" class="btn btn-secondary">Voltar</a>
+                <a href="cadastrar.html" class="btn btn-primary">Nova Entrevista</a>
+                <button id="exportCSV" class="btn btn-success">Exportar CSV</button>
+            </div>
+        </div>
+        
+        <div id="alertContainer"></div>
+        
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Data de Nascimento</th>
+                                <th>Contatos</th>
+                                <th>Data da Entrevista</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="entrevistasTable">
+                            <!-- Dados serão carregados via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="noData" class="text-center p-3 d-none">
+                    <p>Nenhuma entrevista cadastrada.</p>
+                    <a href="cadastrar.html" class="btn btn-primary">Cadastrar Nova Entrevista</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Carregar entrevistas
+            const entrevistas = getEntrevistas();
+            const tableBody = document.getElementById('entrevistasTable');
+            const noData = document.getElementById('noData');
+            
+            // Verificar se há entrevistas
+            if (entrevistas.length === 0) {
+                tableBody.innerHTML = '';
+                noData.classList.remove('d-none');
+            } else {
+                noData.classList.add('d-none');
+                
+                // Preencher tabela
+                tableBody.innerHTML = entrevistas.map(entrevista => `
+                    <tr>
+                        <td>${entrevista.nome}</td>
+                        <td>${formatDate(entrevista.data_nascimento)}</td>
+                        <td>${entrevista.contatos}</td>
+                        <td>${formatDate(entrevista.data_cadastro)}</td>
+                        <td>
+                            <a href="visualizar.html?id=${entrevista.id}" class="btn btn-sm btn-info btn-action">Visualizar</a>
+                            <a href="editar.html?id=${entrevista.id}" class="btn btn-sm btn-warning btn-action">Editar</a>
+                            <button class="btn btn-sm btn-danger btn-action" onclick="confirmarExclusao('${entrevista.id}')">Excluir</button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+            
+            // Exportar para CSV
+            document.getElementById('exportCSV').addEventListener('click', function() {
+                exportToCSV(entrevistas);
+            });
+        });
+        
+        // Função para confirmar exclusão
+        function confirmarExclusao(id) {
+            if (confirm('Tem certeza que deseja excluir esta entrevista?')) {
+                deleteEntrevista(id);
+                
+                // Mostrar alerta
